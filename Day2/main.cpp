@@ -1,14 +1,15 @@
 #include <iostream>
 
-#include "ElfExpedition.h"
-
-using std::cout;
+#include "RPS.h"
 
 int main(){
-	ElfExpedition expedition;
-	expedition.populateInventories();
-	cout << "Most calories: " << expedition.getElfWithMostCalories() << "\n";
-	cout << "Top 3 Total: " << expedition.getTop3ElvesTotal() << "\n\n";
+	RPS rps;
+
+	rps.playGame();
+	rps.displayScores();
+	rps.resetScores();
+	rps.playGamePt2();
+	rps.displayScores();
 
 	return 0;
 }
