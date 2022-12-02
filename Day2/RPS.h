@@ -4,21 +4,16 @@
 #include <fstream>
 #include <vector>
 #include <string>
-
-
+#include <thread>
 
 class RPS{
 private:
-	std::ifstream data;
-	int myScore;
-	int elfScore;
-
+	void playPart1();
+	void playPart2();
 
 public:
 	RPS();
-	void playGame();
-	void displayScores();
-	void resetScores();
-	void playGamePt2();
+	void playBothGames();
+
 };
 

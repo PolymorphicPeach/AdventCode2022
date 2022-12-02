@@ -5,6 +5,9 @@ using std::cin;
 using std::string;
 
 RPS::RPS(){
+
+	std::ifstream data;
+
 	data.open("aoc2.txt", std::ios::in);
 
 	if(data.fail()){
@@ -13,187 +16,218 @@ RPS::RPS(){
 	else{
 		data.close();
 	}
-
-	myScore = 0;
-	elfScore = 0;
-
 }
 
-void RPS::playGame(){
-	data.open("aoc2.txt", std::ios::in);
+void RPS::playBothGames(){
+
+	std::thread part1(&RPS::playPart1, this);
+	std::thread part2(&RPS::playPart2, this);
+
+	part1.join();
+	part2.join();
+}
+
+void RPS::playPart1(){
+
+	std::ifstream file;
+	file.open("aoc2.txt", std::ios::in);
 
 	string line;
-	string elfPlay;
-	string myPlay;
+	int elfScorePt1{0};
+	int myScorePt1{0};
 
-	while(!data.eof()){
-		getline(data, line);
+	while(!file.eof()){
 
-		if(line[0] == 'A'){
-			elfPlay = "rock";
-			++elfScore;
-		}
-		if(line[0] == 'B'){
-			elfPlay = "paper";
-			elfScore += 2;
-		}
-		if(line[0] == 'C'){
-			elfPlay = "scissors";
-			elfScore += 3;
-		}
+		getline(file, line);
 
-		if(line[2] == 'X'){
-			myPlay = "rock";
-			++myScore;
-		}
-		if(line[2] == 'Y'){
-			myPlay = "paper";
-			myScore += 2;
-		}
-		if(line[2] == 'Z'){
-			myPlay = "scissors";
-			myScore += 3;
+		int elfScoreForRound{0};
+		int myScoreForRound{0};
+
+		switch(line[0]){
+		case 'C':
+			++elfScoreForRound;
+
+		case 'B':
+			++elfScoreForRound;
+
+		default:
+			++elfScoreForRound;
 		}
 
-		if(elfPlay == myPlay){
-			elfScore += 3;
-			myScore += 3;
-		}
-		
-		if(elfPlay == "rock" && myPlay == "paper"){
-			myScore += 6;
+		switch(line[2]){
+		case 'Z':
+			++myScoreForRound;
 
-		}
-		if(elfPlay == "rock" && myPlay == "scissors"){
-			elfScore +=6;
+		case 'Y':
+			++myScoreForRound;
 
+		default:
+			++myScoreForRound;
 		}
-		if(elfPlay == "paper" && myPlay == "rock"){
-			elfScore += 6;
 
-		}
-		if(elfPlay == "paper" && myPlay == "scissors"){
-			myScore += 6;
+		switch(elfScoreForRound){
 
-		}
-		if(elfPlay == "scissors" && myPlay == "rock"){
-			myScore += 6;
-		}
-		if(elfPlay == "scissors" && myPlay == "paper"){
-			elfScore += 6;
+		case 1:
 
+			switch(myScoreForRound){
+			case 1:
+				myScoreForRound += 3;
+				elfScoreForRound += 3;
+				break;
+
+			case 2:
+				myScoreForRound += 6;
+				break;
+
+			case 3:
+				elfScoreForRound += 6;
+				break;
+			}
+			break;
+
+		case 2:
+
+			switch(myScoreForRound){
+			case 1:
+				elfScoreForRound += 6;
+				break;
+
+			case 2:
+				myScoreForRound += 3;
+				elfScoreForRound += 3;
+				break;
+
+			case 3:
+				myScoreForRound += 6;
+				break;
+			}
+			break;
+
+		case 3:
+
+			switch(myScoreForRound){
+			case 1:
+				myScoreForRound += 6;
+				break;
+
+			case 2:
+				elfScoreForRound += 6;
+				break;
+
+			case 3:
+				myScoreForRound += 3;
+				elfScoreForRound += 3;
+				break;
+			}
 		}
+
+		elfScorePt1 += elfScoreForRound;
+		myScorePt1 += myScoreForRound;
+
 	}
 
-	data.close();
+	cout << "My Score Pt1: " << myScorePt1 << "\n";
+	cout << "Elf Score Pt1: " << elfScorePt1 << "\n\n";
+
+	file.close();
 }
 
-void RPS::displayScores(){
-	cout << "My Score: " << myScore << "\n"
-		<< "Elf Score: " << elfScore << "\n\n";
-}
+void RPS::playPart2(){
 
-void RPS::resetScores(){
-	myScore = 0;
-	elfScore = 0;
-}
-
-void RPS::playGamePt2(){
-	data.open("aoc2.txt", std::ios::in);
+	std::ifstream file;
+	file.open("aoc2.txt", std::ios::in);
 
 	string line;
-	string elfPlay;
-	string myPlay;
+	int elfScorePt2{0};
+	int myScorePt2{0};
 
-	while(!data.eof()){
-		getline(data, line);
+	while(!file.eof()){
 
-		if(line[0] == 'A'){
-			elfPlay = "rock";
-			++elfScore;
+		getline(file, line);
 
-			if(line[2] == 'X'){
-				myPlay = "scissors";
-				myScore += 3;
-			}
-			if(line[2] == 'Y'){
-				myPlay = elfPlay;
-				++myScore;
-			}
-			if(line[2] == 'Z'){
-				myPlay = "paper";
-				myScore += 2;
+		int elfScoreForRound{0};
+		int myScoreForRound{0};
 
-			}
+		switch(line[0]){
+		case 'A':
+			++elfScoreForRound;
 
+			switch(line[2]){
+			case 'X':
+				myScoreForRound += 3;
+				break;
 
-		}
-		if(line[0] == 'B'){
-			elfPlay = "paper";
-			elfScore += 2;
+			case 'Y':
+				++myScoreForRound;
+				break;
 
-			if(line[2] == 'X'){
-				myPlay = "rock";
-				++myScore;
-			}
-			if(line[2] == 'Y'){
-				myPlay = elfPlay;
-				myScore += 2;
+			case 'Z':
+				myScoreForRound += 2;
+				break;
 
 			}
-			if(line[2] == 'Z'){
-				myPlay = "scissors";
-				myScore += 3;
-			}
-		}
-		if(line[0] == 'C'){
-			elfPlay = "scissors";
-			elfScore += 3;
 
-			if(line[2] == 'X'){
-				myPlay = "paper";
-				myScore += 2;
-			}
-			if(line[2] == 'Y'){
-				myPlay = elfPlay;
-				myScore += 3;
+			break;
 
-			}
-			if(line[2] == 'Z'){
-				myPlay = "rock";
-				++myScore;
+		case 'B':
+			elfScoreForRound += 2;
+
+			switch(line[2]){
+
+			case 'X':
+				++myScoreForRound;
+				break;
+
+			case 'Y':
+				myScoreForRound += 2;
+				break;
+				
+			case 'Z':
+				myScoreForRound += 3;
+				break;
 			}
 
+			break;
+
+		case 'C':
+			elfScoreForRound += 3;
+
+			switch(line[2]){
+
+			case 'X':
+				myScoreForRound += 2;
+				break;
+
+			case 'Y':
+				myScoreForRound += 3;
+				break;
+
+			case 'Z':
+				++myScoreForRound;
+				break;
+			}
+
+			break;
 		}
 
-		if(elfPlay == myPlay){
-			elfScore += 3;
-			myScore += 3;
+		elfScoreForRound += 6;
+
+		switch(line[2]){
+		case 'Z':
+			myScoreForRound += 3;
+			elfScoreForRound -= 3;
+
+		case 'Y':
+			myScoreForRound += 3;
+			elfScoreForRound -= 3;
 		}
 
-		if(elfPlay == "rock" && myPlay == "paper"){
-			myScore += 6;
-
-		}
-		if(elfPlay == "rock" && myPlay == "scissors"){
-			elfScore += 6;
-
-		}
-		if(elfPlay == "paper" && myPlay == "rock"){
-			elfScore += 6;
-
-		}
-		if(elfPlay == "paper" && myPlay == "scissors"){
-			myScore += 6;
-
-		}
-		if(elfPlay == "scissors" && myPlay == "rock"){
-			myScore += 6;
-		}
-		if(elfPlay == "scissors" && myPlay == "paper"){
-			elfScore += 6;
-
-		}
+		myScorePt2 += myScoreForRound;
+		elfScorePt2 += elfScoreForRound;
 	}
 
+	cout << "My Score Pt2: " << myScorePt2 << "\n";
+	cout << "Elf Score Pt2: " << elfScorePt2 << "\n\n";
+
+	file.close();
 }

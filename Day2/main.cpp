@@ -4,12 +4,7 @@
 
 int main(){
 	RPS rps;
-
-	rps.playGame();
-	rps.displayScores();
-	rps.resetScores();
-	rps.playGamePt2();
-	rps.displayScores();
+	rps.playBothGames();
 
 	return 0;
 }
