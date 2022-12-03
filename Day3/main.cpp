@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <set>
 #include <thread>
+#include <chrono>
 
 using std::cout;
 using std::cin;
@@ -12,24 +13,33 @@ using std::string;
 using std::vector;
 
 static int threadsLaunched{0};
-void part1();
-void part2();
+int part1();
+int part2();
 
 int main(){
-	
+	auto startTime = std::chrono::high_resolution_clock::now();
 
-	std::thread t1(part1);
-	std::thread t2(part2);
+	//std::thread t1(part1);
+	//std::thread t2(part2);
 
-	t1.join();
-	t2.join();
+	//t1.join();
+	//t2.join();
 
-	cout << "Threads launched = " << threadsLaunched << "\n\n";
+	cout << part1() << "\n"
+		<< part2() << "\n\n";
+
+	auto finishTime = std::chrono::high_resolution_clock::now();
+
+	// Code below this comment is not counted in the duration; the duration is only for the puzzle solving time, 
+	auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(finishTime - startTime);
+
+	cout << "Threads launched: " << threadsLaunched
+		 << "\nCompleted in: " << duration.count() << " seconds." << "\n\n";
 
 	return 0;
 }
 
-void part1(){
+int part1(){
 	std::ifstream data;
 	data.open("aoc3.txt", std::ios::in);
 	string line;
@@ -82,12 +92,12 @@ void part1(){
 
 	}
 
-	cout << "Part 1 Solution: " << sumItems << "\n\n";
-
 	data.close();
+
+	return sumItems;
 }
 
-void part2(){
+int part2(){
 	std::ifstream data;
 	data.open("aoc3.txt", std::ios::in);
 
@@ -113,8 +123,9 @@ void part2(){
 		char thread1ReturnChar;
 		char thread2ReturnChar;
 
-		std::thread group1Thread([&group1, &thread1ReturnChar](){
-			++threadsLaunched;
+		//std::thread group1Thread([&group1, &thread1ReturnChar]()
+		{
+			//++threadsLaunched;
 			string commonPt1;
 			string commonPt2;
 
@@ -132,10 +143,11 @@ void part2(){
 
 			thread1ReturnChar = commonPt2[0];
 
-		});
+		}//);
 
-		std::thread group2Thread([&group2, &thread2ReturnChar](){
-			++threadsLaunched;
+		//std::thread group2Thread([&group2, &thread2ReturnChar]()
+		{
+			//++threadsLaunched;
 			string commonPt1;
 			string commonPt2;
 
@@ -154,17 +166,18 @@ void part2(){
 				group2[2].begin(), group2[2].end(), std::back_inserter(commonPt2));
 
 			thread2ReturnChar = commonPt2[0];
-		});
+		}//);
 
-		group1Thread.join();
-		group2Thread.join();
+		//group1Thread.join();
+		//group2Thread.join();
 
 		group1Stuff += thread1ReturnChar;
 		group2Stuff += thread2ReturnChar;
 	}
 
-	std::thread group1Thread([&group1Stuff, &sumOfGroups](){
-		++threadsLaunched;
+	//std::thread group1Thread([&group1Stuff, &sumOfGroups]()
+	{
+		//++threadsLaunched;
 		int asciiConvert;
 
 		for(int i{0}; i < group1Stuff.size(); ++i){
@@ -179,10 +192,11 @@ void part2(){
 
 			}
 		}
-	});
+	}//);
 
-	std::thread group2Thread([&group2Stuff, &sumOfGroups](){
-		++threadsLaunched;
+	//std::thread group2Thread([&group2Stuff, &sumOfGroups]()
+	{
+		//++threadsLaunched;
 		int asciiConvert;
 
 		for(int i{0}; i < group2Stuff.size(); ++i){
@@ -196,10 +210,10 @@ void part2(){
 
 			}
 		}
-	});
+	}//);
 
-	group1Thread.join();
-	group2Thread.join();
+	//group1Thread.join();
+	//group2Thread.join();
 
-	cout << "Part 2 Solution: " << sumOfGroups << "\n\n";
+	return sumOfGroups;
 }
