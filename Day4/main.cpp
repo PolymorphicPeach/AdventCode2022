@@ -12,12 +12,10 @@ using std::endl;
 using std::vector;
 using std::string;
 
-
 int main(){
 	std::ifstream data;
 	data.open("aoc4.txt", std::ios::in);
 	string line;
-
 
 	if(data.fail()){
 		cout << "Error: File not found" << "\n\n";
@@ -31,7 +29,6 @@ int main(){
 		++currentLine;
 
 		getline(data, line);
-
 		size_t delimIndex;
 
 		for(size_t i{0}; i < line.size(); ++i){
@@ -52,18 +49,14 @@ int main(){
 
 		int group1Elf1;
 		int group1Elf2;
-
 		group1Stream >> group1Elf1 >> group1Elf2;
 
 		int group2Elf1;
 		int group2Elf2;
-
 		group2Stream >> group2Elf1 >> group2Elf2;
 
 		std::set<int> group1Set;
 		std::set<int> group2Set;
-
-
 
 		for(int i{group1Elf1}; i <= group1Elf2; ++i){
 			group1Set.insert(i);
@@ -72,18 +65,6 @@ int main(){
 		for(int i{group2Elf1}; i <= group2Elf2; ++i){
 			group2Set.insert(i);
 		}
-		
-		cout << "group1 set = ";
-		for(auto s : group1Set){
-			cout << s << ", ";
-		}
-		cout << endl;
-
-		cout << "group2 set = ";
-		for(auto s : group2Set){
-			cout << s << ", ";
-		}
-		cout << endl;
 
 		bool overlapFound{false};
 		bool noOverlapAtAll{false};
@@ -108,13 +89,10 @@ int main(){
 			overlapAtAll.push_back(currentLine);
 		}
 
-
-
 	}
 
-	cout << "answer: " << overlapLines.size() << endl << endl;
-	cout << "ans2: " << overlapAtAll.size() << endl << endl;
-
+	cout << "answer: " << overlapLines.size() << endl 
+	     << "answer2: " << overlapAtAll.size() << endl << endl;
 
 	return 0;
 }
